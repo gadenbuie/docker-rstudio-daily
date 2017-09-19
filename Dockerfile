@@ -3,7 +3,7 @@ FROM rocker/drd
 ## This handle reaches Carl and Dirk
 MAINTAINER "Carl Boettiger and Dirk Eddelbuettel" rocker-maintainers@eddelbuettel.com
 
-ENV DEBIAN-FRONTEND noninteractive  
+ENV DEBIAN_FRONTEND noninteractive  
 ENV PATH /usr/lib/rstudio-server/bin/:$PATH   
 
 RUN apt-get update \
@@ -16,9 +16,11 @@ RUN apt-get update \
 
 RUN sh -c "echo 'deb http://ftp.de.debian.org/debian jessie main' >> /etc/apt/sources.list"
 
-RUN apt-get update \
-  && apt-get install -t stable libssl1.0.0 \
-  && apt-get install -y -t unstable --no-install-recommends \
+RUN apt-get update -y
+
+RUN apt-get install -y libssl1.0.0 rrdtool
+
+RUN apt-get install -y -t unstable --no-install-recommends \
     ca-certificates \
     file \
     git \

@@ -9,10 +9,11 @@ ENV PATH /usr/lib/rstudio-server/bin/:$PATH
 RUN apt-get update \
   && apt-get install -y -t unstable --no-install-recommends \
     libxml2-dev libssl-dev \
-  && install2.r xml2 httr downloader XML \
-  && wget --no-check-certificate \
-    https://raw.githubusercontent.com/rocker-org/rstudio-daily/master/latest.R \
-  && Rscript latest.R && rm latest.R 
+  && install2.r xml2 httr downloader XML
+
+COPY latest.R /opt/
+
+RUN Rscript /opt/latest.R
 
 RUN sh -c "echo 'deb http://ftp.de.debian.org/debian jessie main' >> /etc/apt/sources.list"
 

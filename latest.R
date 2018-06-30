@@ -1,7 +1,6 @@
 #!/usr/bin/Rscript
 
-pg <- httr::content(httr::GET("http://www.rstudio.org/download/daily/server/ubuntu64/"), as = "text")
-doc <- xml2::read_xml(pg)
-deb <- xml2::xml_attr(xml2::xml_find_all(doc, "//tr[@id='row1']/td/a[@href]"), "href")
+pg <- httr::content(httr::GET("https://dailies.rstudio.com/rstudioserver/oss/ubuntu/amd64/"), as = "parsed")
+deb <- xml2::xml_attr(xml2::xml_find_all(pg, "//tr//td//a"), "href")[1]
 download.file(deb, method="wget", dest="rstudio-server-daily-amd64.deb")
 

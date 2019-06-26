@@ -1,7 +1,7 @@
 FROM rocker/verse:latest
 
 RUN apt-get update \
-  && apt-get install -y libclang-dev
+  && apt-get install -y libclang-dev libxkbcommon-x11-0
 
 COPY latest.R /opt/
 

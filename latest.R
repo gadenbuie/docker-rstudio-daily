@@ -10,7 +10,7 @@ pg <- httr::content(
 deb <- xml2::xml_attr(xml2::xml_find_all(pg, "//tr//td//a"), "href")[1]
 vm <- regexec("rstudio-([0-9.]+)", deb)
 v <- regmatches(deb, vm)[[1]][2]
-if (grepl("--version", args, fixed = TRUE)) {
+if (!is.null(args) && grepl("--version", args, fixed = TRUE)) {
   cat(v)
 } else {
   cat(v, file = "/rstudio-server.version")

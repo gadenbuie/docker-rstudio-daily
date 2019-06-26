@@ -20,7 +20,7 @@ after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
     docker tag $DOCKER_USER/$REPO:$COMMIT $DOCKER_USER/$REPO:latest;
-    docker tag $DOCKER_USER/$REPO:$COMMIT $DOCKER_USER/$REPO:$(latest.R --version);
+    docker tag $DOCKER_USER/$REPO:$COMMIT $DOCKER_USER/$REPO:travis-$TRAVIS_BUILD_NUMBER;
     docker push $DOCKER_USER/$REPO;
     fi
 

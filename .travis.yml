@@ -4,15 +4,15 @@ services:
 
 env:
   global:
-  - DOCKER_USER="grrrck"
-  - secure: "NvLc0YqwxJXxHjFmFWZPVCb9Gyz7Ktj52P5EAXwGT9RD+JG5TEmmY5krjl2LTayW9/GnQ0STk/HVcFwiDX1CcOEOeZvsyUBZW4SvOOPUQB12zYQQmPn0UZl9FJwHvVeSb+rPcgQYad1oGjAgwUOvU+qqoXb+bq6q5WuzMTNfQ2XIGAKG7jkuH6qRaKLmgrjeeV+7MzBro4kbFJCTtERrr8MyGo7RH2h6gEcdGE1gRjuag1PZITbpMcadSeL5iiJBefX8l0/Upn/nmbr5GYh0wJk7IsOeF1WSla9VoO6IQ4oGmRIzycIZcR89FNnzEBUhjNXMHNY81zviPY3lPfHODMVV9Q/gvC/h/otLfL8Mi+lClZB66a8Wd18G+rRXVSnQLVX7zD5o3lv7NqXS8N3Wwx7TAijsk8e8iylBSuvWoRxHKCHyRfD0ZCa/iEiZljSOhA9AEblDlprJ3RuCwd6OGYgFCVp3JRLS8rSqCtOBZyevg6g43auMYuprR2RiPJ1IyhP+lYJLgkfmr7rUzYA+Ch+TDLKF+4Ox9ndGbkwza3+QX9kPZpaGtMfZBNVGi8A7zp9a3hqVUWoJ1fP7X4TXv33jyJo7/ZS3IobWbJSuk3B1IvqM+oJqK7/Z7jTAOvuUcVfVLzofDnxvmvO0mPMt6gOnqZKfMdEUe0ujQvoRPSQ="
-  - COMMIT=${TRAVIS_COMMIT::8}
-  - REPO="rstudio-daily"
+    - DOCKER_USER="grrrck"
+    - secure: "NvLc0YqwxJXxHjFmFWZPVCb9Gyz7Ktj52P5EAXwGT9RD+JG5TEmmY5krjl2LTayW9/GnQ0STk/HVcFwiDX1CcOEOeZvsyUBZW4SvOOPUQB12zYQQmPn0UZl9FJwHvVeSb+rPcgQYad1oGjAgwUOvU+qqoXb+bq6q5WuzMTNfQ2XIGAKG7jkuH6qRaKLmgrjeeV+7MzBro4kbFJCTtERrr8MyGo7RH2h6gEcdGE1gRjuag1PZITbpMcadSeL5iiJBefX8l0/Upn/nmbr5GYh0wJk7IsOeF1WSla9VoO6IQ4oGmRIzycIZcR89FNnzEBUhjNXMHNY81zviPY3lPfHODMVV9Q/gvC/h/otLfL8Mi+lClZB66a8Wd18G+rRXVSnQLVX7zD5o3lv7NqXS8N3Wwx7TAijsk8e8iylBSuvWoRxHKCHyRfD0ZCa/iEiZljSOhA9AEblDlprJ3RuCwd6OGYgFCVp3JRLS8rSqCtOBZyevg6g43auMYuprR2RiPJ1IyhP+lYJLgkfmr7rUzYA+Ch+TDLKF+4Ox9ndGbkwza3+QX9kPZpaGtMfZBNVGi8A7zp9a3hqVUWoJ1fP7X4TXv33jyJo7/ZS3IobWbJSuk3B1IvqM+oJqK7/Z7jTAOvuUcVfVLzofDnxvmvO0mPMt6gOnqZKfMdEUe0ujQvoRPSQ="
+    - COMMIT=${TRAVIS_COMMIT::8}
+    - REPO="rstudio-daily"
 
 script:
   - docker build -f Dockerfile -t $DOCKER_USER/$REPO:$COMMIT .
-  - docker run -ti rocker/rstudio-daily R --version
-  - docker run -d --name rstudio rocker/rstudio-daily
+  - docker run -ti $DOCKER_USER/rstudio-daily R --version
+  - docker run -d --name rstudio -e PASSWORD="321654" $DOCKER_USER/rstudio-daily
   - sleep 5 && docker ps | grep rstudio-daily
   - docker rm -f $(docker ps -a -q)
 
@@ -23,4 +23,3 @@ after_success:
     docker tag $DOCKER_USER/$REPO:$COMMIT $DOCKER_USER/$REPO:travis-$TRAVIS_BUILD_NUMBER;
     docker push $DOCKER_USER/$REPO;
     fi
-

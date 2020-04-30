@@ -10,7 +10,7 @@ env:
     - REPO="rstudio-daily"
 
 script:
-  - docker build -f Dockerfile -t $DOCKER_USER/$REPO:$COMMIT .
+  - docker build -f Dockerfile -t $DOCKER_USER/$REPO:latest .
   - docker run -ti $DOCKER_USER/rstudio-daily R --version
   - docker run -d --name rstudio -e PASSWORD="321654" $DOCKER_USER/rstudio-daily
   - sleep 5 && docker ps | grep rstudio-daily
@@ -19,7 +19,6 @@ script:
 after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
-    docker tag $DOCKER_USER/$REPO:$COMMIT $DOCKER_USER/$REPO:latest;
-    docker tag $DOCKER_USER/$REPO:$COMMIT $DOCKER_USER/$REPO:travis-$TRAVIS_BUILD_NUMBER;
+    docker tag $DOCKER_USER/$REPO:latest $DOCKER_USER/$REPO:$COMMIT;
     docker push $DOCKER_USER/$REPO;
     fi
